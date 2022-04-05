@@ -8,6 +8,14 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+type PixKeyRepositoryInterface interface {
+	RegisterKey(pixKey *PixKey) (*PixKey, error)
+	FindKeyByKind(key string, kind string) (*PixKey, error)
+	AddBank(bank *Bank) error
+	AddAccount(account *Account) error
+	FindAccount(id string) (*Account, error)
+}
+
 type PixKey struct {
 	Base      `valid:"required"`
 	Kind      string   `json:"kind" valid:"notnull"`
@@ -15,9 +23,6 @@ type PixKey struct {
 	AccountID string   `json:"account_id"`
 	Account   *Account `valid:"-"`
 	Status    string   `json:"status"`
-
-	OwnerName string `json:"owner_name" valid:"notnull"`
-	Number    string `json:"number" valid:"notnull"`
 }
 
 func (pixKey *PixKey) isValid() error {
